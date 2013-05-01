@@ -22,6 +22,7 @@ package()
 {
 	cd customizepkg-patching
 	install -d "$pkgdir/usr/bin"
+	sed -i 's/^ver=unknown$/ver='"$pkgver"'/' customizepkg
 	install -t "$pkgdir/usr/bin/" customizepkg
 	install -d "$pkgdir/etc/customizepkg.d"
 }
