@@ -1,19 +1,26 @@
-# Author: Daniel Oertwig <Daniel.Oertwig.at.googlemail.com>
+# Author: Daniel Oertwig <Daniel.Oertwig+customizepkgpatching at gmail dot com>
 pkgname=customizepkg-patching
-pkgver=0.1
 pkgrel=1
-pkgdesc="A tool to modify automatically PKGBUILD, modifed version using patch" 
-url="http://www.proggen.org/" 
+pkgdesc="A tool to automate modification of PKGBUILDs using patch" 
+url="https://github.com/DanielOertwig/customizepkg-patching" 
 license="GPL" 
 arch=('any')
 depends=('bash' 'diffutils' 'patch')
 optdepends=('vim: For using vimdiff')
 provides=(customizepkg)
 conflicts=(customizepkg)
-source=($pkgname-$pkgver.src.tar.gz) 
+source=('git://github.com/DanielOertwig/customizepkg-patching#branch=release') 
+md5sums=('SKIP')
 
-build() { 
-  	install -D -m 755 "$srcdir/$pkgname/customizepkg" "$pkgdir/usr/bin/customizepkg"
-  	install -d -m 755 "$pkgdir/etc/customizepkg.d"
+pkgver()
+{
+	cd customizepkg-patching
+	echo $(git rev-list --count master).$(git rev-parse --short master)
 }
-md5sums=('356f6ba543e185ccb07fbb8f6f6dde2d')
+package()
+{
+	cd customizepkg-patching
+	install -d "$pkgdir/usr/bin"
+	install -t "$pkgdir/usr/bin/cusomizepkg" customizepkg
+	install -d "$pkgdir/etc/customizepkg.d"
+}
