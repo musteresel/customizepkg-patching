@@ -15,7 +15,7 @@ md5sums=('SKIP')
 pkgver()
 {
 	cd customizepkg-patching
-	echo $(git rev-list --count master).$(git rev-parse --short master)
+	echo $(git rev-list --count release).$(git rev-parse --short release)
 }
 package()
 {
