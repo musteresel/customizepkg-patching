@@ -1,4 +1,4 @@
- Customizepkg-patching, a tool to modify PKGBUILD automatically
+ Customizepkg-patching, a tool to automate modification of PKGBUILDs
 
  Copyright (C) 2011  Daniel Oertwig
 
