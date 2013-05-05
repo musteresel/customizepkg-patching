@@ -177,6 +177,10 @@ fi
 patch -b -z .original -i "/etc/customizepkg.d/$pkgname"
 if [[ "$?" -gt "1" ]]; then
   echo "Patching failed!"
+  for f in *.rej; do
+    echo "$f"
+    cat "$f"
+  done
   exit 1
 fi
 
