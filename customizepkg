@@ -77,6 +77,7 @@ print_version()
 #-----------------------------------------------------------------------#
 ## MAIN PROGRAMM
 #-----------------------------------------------------------------------#
+shopt -s nullglob
 VIMDIFF=0
 MODIFY=0
 PATCH=0
@@ -126,7 +127,6 @@ source ./PKGBUILD || exit 1
 
 # Perform an action on each pair of original and
 # changed files.
-shopt -s nullglob
 for_changes_do() {
   for f in ./*.original; do
     "$@" "$f" "${f%.original}"
@@ -173,12 +173,16 @@ fi
 
 
 
-# Test the patch. Apply it only if it passes.
-if ! patch --dry-run -s -i "/etc/customizepkg.d/$pkgname"; then
+# Apply the patch. Exit if something goes wrong.
+patch -b -z .original -i "/etc/customizepkg.d/$pkgname"
+if [[ "$?" -gt "1" ]]; then
   echo "Patching failed!"
+  for f in *.rej; do
+    echo "$f"
+    cat "$f"
+  done
   exit 1
 fi
-patch -b -z .original -i "/etc/customizepkg.d/$pkgname"
 
 
 
@@ -205,7 +209,8 @@ revert() {
 # modified file stays. Otherwise, the original
 # file is used.
 if [[ "$MODIFY" == "0" ]]; then
-	for_changes_do revert
+  for_changes_do revert
+  rm -f *.rej
 fi
 
 
